@@ -4,10 +4,9 @@ require 5.006_00;
 
 use strict;
 
-use Carp;
 use Exporter;
 
-$Locale::Currency::Format::VERSION = "1.2";
+$Locale::Currency::Format::VERSION = "1.22";
 
 @Locale::Currency::Format::ISA     = qw(Exporter);
 @Locale::Currency::Format::EXPORT  = qw(
@@ -495,13 +494,14 @@ Also, be aware that some currencies do not have monetary symbol.
 As countries merge together or split into smaller ones, currencies can be added or removed by the ISO. Please help keep the list up to date by sending your feedback to the email address at the bottom.
 
 To see the error, examine $Locale::Currency::Format::error
-  B<use Locale::Currency::Format>;
-  B<my $value = currency_format('US', 1000)>;
-  B<print $value ? $value : $Locale::Currency::Format::error>
-  or
-  B<use Locale::Currency::Format qw(:DEFAULT $error)>;
-  B<my $value = currency_format('US', 1000)>;
-  B<print $value ? $value : $error> 
+
+  use Locale::Currency::Format;
+  my $value = currency_format('US', 1000);
+  print $value ? $value : $Locale::Currency::Format::error
+  OR
+  use Locale::Currency::Format qw(:DEFAULT $error);
+  my $value = currency_format('US', 1000);
+  print $value ? $value : $error 
 
 Lastly, please refer to L<perluniintro> and L<perlunicode> for displaying Unicode characters if you intend to use B<FMT_SYMBOL> and B<currency_symbol>. Otherwise, it reads "No worries, mate!"
 
