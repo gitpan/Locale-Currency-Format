@@ -1,5 +1,5 @@
 Makefile.PL
 MANIFEST
 README
-lib/Locale/Currency/Format.pm
+Format.pm
 t/format.t

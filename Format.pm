@@ -7,7 +7,7 @@ use strict;
 use Carp;
 use Exporter;
 
-$Locale::Currency::Format::VERSION = "1.0";
+$Locale::Currency::Format::VERSION = "1.2";
 
 @Locale::Currency::Format::ISA     = qw(Exporter);
 @Locale::Currency::Format::EXPORT  = qw(
