@@ -1,0 +1,5 @@
+Makefile.PL
+MANIFEST
+README
+lib/Locale/Currency/Format.pm
+t/format.t
