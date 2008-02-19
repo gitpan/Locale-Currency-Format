@@ -6,7 +6,7 @@ use strict;
 
 use Exporter;
 
-$Locale::Currency::Format::VERSION = '1.23';
+$Locale::Currency::Format::VERSION = '1.24';
 
 @Locale::Currency::Format::ISA     = qw(Exporter);
 @Locale::Currency::Format::EXPORT  = qw(
@@ -413,7 +413,7 @@ PYG => ["Guarani",0,$EMPTY,$EMPTY,"","\x{20B2}","&#20B2;","Gs.",$EMPTY],
 QAR => ["Qatari Rial",0,$EMPTY,$EMPTY,"","\x{FDFC}","&#xFDFC;",$EMPTY,$EMPTY],
 RON => ["Leu",2,".",","," ",$EMPTY,$EMPTY,"lei",0],
 RSD => ["Serbian Dinar",2,$EMPTY,$EMPTY,$EMPTY,$EMPTY,$EMPTY,"din",0],
-RUR => ["Russian Ruble",2,".",",",$EMPTY,"\x{0440}\x{0443}\x{0431}","&#0440;&#0443;&#0431;","RUB",1],
+RUB => ["Russian Ruble",2,".",",",$EMPTY,"\x{0440}\x{0443}\x{0431}","&#0440;&#0443;&#0431;","RUB",1],
 RWF => ["Rwanda Franc",0,$EMPTY,$EMPTY,"",$EMPTY,$EMPTY,$EMPTY,$EMPTY],
 SAC => ["S. African Rand Commerc.",0,$EMPTY,$EMPTY,"",$EMPTY,$EMPTY,$EMPTY,$EMPTY],
 SAR => ["Saudi Riyal",2,",","."," ","\x{FDFC}","&#xFDFC;","SR",1],
@@ -519,26 +519,29 @@ amount respectively, and optionally a third parameter indicating which
 format is desired. Upon failure, it returns I<undef> and an error message is
 stored in B<$Locale::Currency::Format::error>.
 
-  CODE   - A 3-letter currency code as specified in ISO 4217.
-           Note that old code such as GBP, FRF and so on can also
-           be valid.
+    CODE
+        A 3-letter currency code as specified in ISO 4217.
+        Note that old code such as GBP, FRF and so on can also
+        be valid.
 
-  AMOUNT - A numeric value.
+    AMOUNT
+        A numeric value.
 
-  FORMAT - There are five different format options FMT_STANDARD,
-           FMT_COMMON, FMT_SYMBOL, FMT_HTML and FMT_NAME. If it is
-           omitted, the default format is FMT_STANDARD.
+    FORMAT
+        There are five different format options FMT_STANDARD,
+        FMT_COMMON, FMT_SYMBOL, FMT_HTML and FMT_NAME. If it is
+        omitted, the default format is FMT_STANDARD.
 
-           FMT_STANDARD Ex: 1,000.00 USD, 1.000.000,00 EUR
-           FMT_SYMBOL   Ex: $1,000.00
-           FMT_COMMON   Ex: 1.000 Dong (Vietnam), BEF 1.000 (Belgium)
-           FMT_HTML     Ex: &#xA3;1,000.00  (pound-sign HTML escape)
-           FMT_NAME     Ex: 1,000.00 US Dollar
+        FMT_STANDARD Ex: 1,000.00 USD, 1.000.000,00 EUR
+        FMT_SYMBOL   Ex: $1,000.00
+        FMT_COMMON   Ex: 1.000 Dong (Vietnam), BEF 1.000 (Belgium)
+        FMT_HTML     Ex: &#xA3;1,000.00  (pound-sign HTML escape)
+        FMT_NAME     Ex: 1,000.00 US Dollar
 
-           NOTE: By default the trailing zeros after the decimal
-	   point will be added. To turn it off, do a bitwise C<or>
-           of FMT_NOZEROS with one of the five options above.
-           Ex: FMT_STANDARD | FMT_NOZEROS  will give 1,000 USD
+        NOTE: By default the trailing zeros after the decimal
+        point will be added. To turn it off, do a bitwise C<or>
+        of FMT_NOZEROS with one of the five options above.
+        Ex: FMT_STANDARD | FMT_NOZEROS  will give 1,000 USD
            
 =item C<currency_symbol(CODE [, TYPE])>
 
@@ -547,12 +550,14 @@ lookup given a 3-letter currency code. Optionally, one can specify which
 format the symbol should be returned - Unicode-based character or HTML escape.
 Default is a Unicode-based character. Upon failure, it returns I<undef> and an error message is stored in B<$Locale::Currency::Format::error>.
 
-  CODE   - A 3-letter currency code as specified in ISO 4217
-  TYPE   - There are two available types SYM_UTF and SYM_HTML
+    CODE
+        A 3-letter currency code as specified in ISO 4217
 
-	   SYM_UTF  returns the symbol (if exists) as an Unicode
-		    character
-           SYM_HTML returns the symbol (if exists) as a HTML escape
+    TYPE
+        There are two available types SYM_UTF and SYM_HTML
+        SYM_UTF  returns the symbol (if exists) as an Unicode
+		 character
+        SYM_HTML returns the symbol (if exists) as a HTML escape
 
 =item C<currency_set(CODE [, TEMPLATE, FORMAT])>
 
@@ -563,30 +568,47 @@ B<currency_set> can be used to set a custom format for a currency instead of the
         . . .
     }
 
-  CODE     - A 3-letter currency code as specified in ISO 4217
-  TEMPLATE - A template in the form #.###,##$, #.### kr, etc.
-             If a unicode character is used, make sure that
-             the template is double-quoted
+The arguments to B<currency_set> are:
 
-             currency_set('GBP', "\x{00A3}#,###.##", FMT_SYMBOL)
+    CODE
+        A 3-letter currency code as specified in ISO 4217
 
-             If an HTML escaped symbol is used, indicate so
+    TEMPLATE
+        A template in the form #.###,##$, #.### kr, etc.
 
-             currency_set('GBP', '&#00A3;#,###.##', FMT_HTML)
+        If a unicode character is used, make sure that
+        the template is double-quoted.
+        Ex: currency_set('GBP', "\x{00A3}#,###.##", FMT_SYMBOL)
 
-  FORMAT   - When TEMPLATE is present, FORMAT is required.
-             FMT_SYMBOL, FMT_COMMON, FMT_HTML are understood.
-             Note that FMT_STANDARD and FMT_NAME will always be in
-             the form <amount><space><code|name> such as
-             1,925.95 AUD. Hence, currency_set returns an error
-             if FORMAT is FMT_STANDARD or FMT_NAME.
-             With FMT_COMMON, you can always attain what you could
-             do with FMT_STANDARD and FMT_NAME, as follows
+        If an HTML symbol is wanted, escape its equivalent HTML code.
+        Ex: currency_set('GBP', '&#00A3;#,###.##', FMT_HTML)
 
-             currency_set('USD', 'USD #.###,##', FMT_COMMON)
-             currency_set('USD', 'US Dollar #.###,##', FMT_COMMON)
+    FORMAT
+        This argument is required if TEMPLATE is present.
+        The formats FMT_SYMBOL, FMT_COMMON, FMT_HTML are accepted.
 
-Invoking B<currency_set> with one argument will reset all formats to their original settings. For example, C<currency_set('USD')> will clear all previous custom settings for the US currency (ie. FMT_SYMBOL, FMT_HTML, FMT_COMMON).
+        NOTE!
+        FMT_STANDARD and FMT_NAME will always be in the form
+        <amount><space><code|name> such as 1,925.95 AUD. Hence,
+        currency_set returns an error if FMT_STANDARD or FMT_NAME
+        is specified as FORMAT.
+
+        With FMT_COMMON, you can always achieve what you would
+        have done with FMT_STANDARD and FMT_NAME, as follows
+             
+        my $amt = 1950.95;
+        currency_set('USD', 'USD #.###,##', FMT_COMMON);
+        print currency_format('USD', $amt, FMT_COMMON); # USD 1,950.95
+        currency_set('USD', 'US Dollar #.###,##', FMT_COMMON);
+        print currency_format('USD', $amt, FMT_COMMON); # US Dollar 1,950.95
+
+Invoking B<currency_set> with one argument will reset all formats to their original settings.
+
+For example
+
+    currency_set('USD')
+
+will clear all previous custom settings for the US currency (ie. FMT_SYMBOL, FMT_HTML, FMT_COMMON).
 
 =head2 A WORD OF CAUTION
 
@@ -598,13 +620,15 @@ As countries merge together or split into smaller ones, currencies can be added 
 
 To see the error, examine $Locale::Currency::Format::error
 
-  use Locale::Currency::Format;
-  my $value = currency_format('USD', 1000);
-  print $value ? $value : $Locale::Currency::Format::error
-  OR
-  use Locale::Currency::Format qw(:DEFAULT $error);
-  my $value = currency_format('USD', 1000);
-  print $value ? $value : $error 
+    use Locale::Currency::Format;
+    my $value = currency_format('USD', 1000);
+    print $value ? $value : $Locale::Currency::Format::error
+
+    OR
+
+    use Locale::Currency::Format qw(:DEFAULT $error);
+    my $value = currency_format('USD', 1000);
+    print $value ? $value : $error 
 
 Lastly, please refer to L<perluniintro> and L<perlunicode> for displaying Unicode characters if you intend to use B<FMT_SYMBOL> and B<currency_symbol>. Otherwise, it reads "No worries, mate!"
 
