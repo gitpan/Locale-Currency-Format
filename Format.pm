@@ -6,7 +6,7 @@ use strict;
 
 use Exporter;
 
-$Locale::Currency::Format::VERSION = '1.24';
+$Locale::Currency::Format::VERSION = '1.25';
 
 @Locale::Currency::Format::ISA     = qw(Exporter);
 @Locale::Currency::Format::EXPORT  = qw(
@@ -156,7 +156,7 @@ sub currency_set {
 
     if (!$tmpl) {
         $currency{$ucc} = $original{$ucc} if $original{$ucc};
-        return 1;
+        return $ucc;
     }
 
     if ($tmpl !~ m{ \A
@@ -177,10 +177,10 @@ sub currency_set {
         return;
     }
 
-    # let's save an original copy if it has yet been done
+    # Let's save an original copy if it has yet been done
     $original{$ucc}   = [@$cur] unless $original{$ucc};
 
-    # set fields based on template
+    # Set fields based on template
     $cur->[$pre]      = $1 ? 1 : 0 if $1 or $5;
     $cur->[$thou_sep] = $2;
     $cur->[$dec_sep ] = $3 || $EMPTY;
@@ -197,7 +197,7 @@ sub currency_set {
             $cur->[$com_sym] = $2;    
         }
     }
-    return 1;
+    return $ucc;
 }
 
 # These functions are copied directly out of Number::Format due to a bug that 
@@ -563,9 +563,15 @@ Default is a Unicode-based character. Upon failure, it returns I<undef> and an e
 
 B<currency_set> can be used to set a custom format for a currency instead of the provided format. For example, in many non-English speaking countries, the US dollars might be displayed as B<2.999,99 $> instead of the usual B<$2,999.99>. In order to accomplish this, one will need to do as follows:
 
-    if (currency_set('USD', '#.###,## $', FMT_COMMON)) {
-        $amt = currency_format('USD', 2999.99, FMT_COMMON);
-        . . .
+    use Locale::Currency::Format qw(:DEFAULT $error);
+
+    my $currency = 'USD';
+    my $template = '#.###,## $';
+    if (currency_set($currency, $template, FMT_COMMON)) {
+        print currency_format($currency, 2999.99, FMT_COMMON), "\n";
+    }
+    else {
+        print "cannot set currency format for $currency: $error\n";
     }
 
 The arguments to B<currency_set> are:
