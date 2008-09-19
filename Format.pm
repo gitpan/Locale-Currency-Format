@@ -6,12 +6,15 @@ use strict;
 
 use Exporter;
 
-$Locale::Currency::Format::VERSION = '1.25';
+$Locale::Currency::Format::VERSION = '1.26';
 
 @Locale::Currency::Format::ISA     = qw(Exporter);
 @Locale::Currency::Format::EXPORT  = qw(
     currency_format
     currency_symbol
+    decimal_precision
+    decimal_separator
+    thousands_separator
     currency_set
     FMT_NOZEROS
     FMT_STANDARD
@@ -26,7 +29,8 @@ $Locale::Currency::Format::VERSION = '1.25';
 @Locale::Currency::Format::EXPORT_OK = qw($error);
 
 %Locale::Currency::Format::EXPORT_TAGS = (
-  DEFAULT => [@Locale::Currency::Format::EXPORT]
+  DEFAULT => [@Locale::Currency::Format::EXPORT],
+  default => [@Locale::Currency::Format::EXPORT],
 );
 
 $Locale::Currency::Format::error = q{};
@@ -130,6 +134,75 @@ sub currency_symbol {
     }
 
     return $sym;
+}
+
+sub decimal_precision {
+    my ($code) = @_;
+
+    if (!defined $code) {
+        $::_error = 'Undefined currency code';
+        return;
+    }
+
+    my $cur = $currency{uc $code};
+    if (!$cur) {
+        $::_error = 'Invalid currency code';
+        return;
+    }
+
+    my $precision = $cur->[$frac_len];
+    if (!$precision) {
+        $::_error = 'Non-existant decimal precision';
+        return;
+    }
+
+    return $precision;
+}
+
+sub decimal_separator {
+    my ($code) = @_;
+
+    if (!defined $code) {
+        $::_error = 'Undefined currency code';
+        return;
+    }
+
+    my $cur = $currency{uc $code};
+    if (!$cur) {
+        $::_error = 'Invalid currency code';
+        return;
+    }
+
+    my $separator = $cur->[$dec_sep];
+    if (!$separator) {
+        $::_error = 'Non-existant decimal separator';
+        return;
+    }
+
+    return $separator;
+}
+
+sub thousands_separator {
+    my ($code) = @_;
+
+    if (!defined $code) {
+        $::_error = 'Undefined currency code';
+        return;
+    }
+
+    my $cur = $currency{uc $code};
+    if (!$cur) {
+        $::_error = 'Invalid currency code';
+        return;
+    }
+
+    my $separator = $cur->[$thou_sep];
+    if (!$separator) {
+        $::_error = 'Non-existant thousands separator';
+        return;
+    }
+
+    return $separator;
 }
 
 sub currency_set {
@@ -485,6 +558,15 @@ Locale::Currency::Format - Perl functions for formatting monetary values
   $sym = currency_symbol('USD');                   # => $
   $sym = currency_symbol('GBP', SYM_HTML);         # => &#163;
 
+  $decimals = decimal_precision('USD');            # => 2
+  $decimals = decimal_precision('BHD');            # => 3
+
+  $thou_sep = thousands_separator('USD');          # => ,
+  $thou_sep = thousands_separator('EUR');          # => .
+
+  $dec_sep = decimal_separator('USD');             # => .
+  $dec_sep = decimal_separator('EUR');             # => ,
+
   currency_set('USD', '#.###,## $', FMT_COMMON);   # => set custom format
   currency_format('USD', 1000, FMT_COMMON);        # => 1.000,00 $
   currency_set('USD');                             # => reset default format
@@ -559,11 +641,41 @@ Default is a Unicode-based character. Upon failure, it returns I<undef> and an e
 		 character
         SYM_HTML returns the symbol (if exists) as a HTML escape
 
+=item C<decimal_precision(CODE)>
+
+For conveniences, the function B<decimal_precision> is provided to lookup the decimal
+precision for a given 3-letter currency code.
+
+Upon failure, it returns I<undef> and an error message is stored in B<$Locale::Currency::Format::error>.
+
+    CODE
+        A 3-letter currency code as specified in ISO 4217
+
+=item C<decimal_separator(CODE)>
+
+For conveniences, the function B<decimal_separator> is provided to lookup the decimal
+separator for a given 3-letter currency code.
+
+Upon failure, it returns I<undef> and an error message is stored in B<$Locale::Currency::Format::error>.
+
+    CODE
+        A 3-letter currency code as specified in ISO 4217
+
+=item C<thousands_separator(CODE)>
+
+For conveniences, the function B<thousands_separator> is provided to lookup the thousands 
+separator for a given 3-letter currency code.
+
+Upon failure, it returns I<undef> and an error message is stored in B<$Locale::Currency::Format::error>.
+
+    CODE
+        A 3-letter currency code as specified in ISO 4217
+
 =item C<currency_set(CODE [, TEMPLATE, FORMAT])>
 
 B<currency_set> can be used to set a custom format for a currency instead of the provided format. For example, in many non-English speaking countries, the US dollars might be displayed as B<2.999,99 $> instead of the usual B<$2,999.99>. In order to accomplish this, one will need to do as follows:
 
-    use Locale::Currency::Format qw(:DEFAULT $error);
+    use Locale::Currency::Format qw(:default $error);
 
     my $currency = 'USD';
     my $template = '#.###,## $';
@@ -645,6 +757,10 @@ L<Locale::Currency>, L<Math::Currency>, L<Number::Format>, L<perluniintro>, L<pe
 =head1 BUGS
 
 If you find any inaccurate or missing information, please send your comments to L<tnguyen@cpan.org>. Your effort is certainly appreciated!
+
+=head1 CONTRIBUTOR(S)
+
+James Kiser <james.kiser@gmail.com>
 
 =head1 AUTHOR
 

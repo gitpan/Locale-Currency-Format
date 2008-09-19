@@ -1,5 +1,5 @@
 
-BEGIN { $| = 1; print "1..20\n"; }
+BEGIN { $| = 1; print "1..26\n"; }
 END   { print "not ok 1\n" unless $loaded; }
 
 use Locale::Currency::Format;
@@ -64,3 +64,21 @@ print "ok 19\n";
 
 print "not " unless currency_set('GBP', "\x{00A3}#,###.##", FMT_COMMON);
 print "ok 20\n";
+
+print 'not ' unless decimal_precision('usd') == 2;
+print "ok 21\n";
+
+print 'not ' unless decimal_precision('bhd') == 3;
+print "ok 22\n";
+
+print 'not ' unless decimal_separator('usd') eq '.';
+print "ok 23\n";
+
+print 'not ' unless decimal_separator('eur') eq ',';
+print "ok 24\n";
+
+print 'not ' unless thousands_separator('usd') eq ',';
+print "ok 25\n";
+
+print 'not ' unless thousands_separator('eur') eq '.';
+print "ok 26\n";
