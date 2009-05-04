@@ -6,7 +6,7 @@ use strict;
 
 use Exporter;
 
-$Locale::Currency::Format::VERSION = '1.26';
+$Locale::Currency::Format::VERSION = '1.27';
 
 @Locale::Currency::Format::ISA     = qw(Exporter);
 @Locale::Currency::Format::EXPORT  = qw(
@@ -355,7 +355,7 @@ sub format_negative {
 #        name frac_len thou_sep dec_sep space_sep utf_sym htm_sym com_sym pre
 %currency = (
 AED => ["UAE Dirham",2,",","."," ",$EMPTY,$EMPTY,"Dhs.",1],
-AFA => ["Afghani",0,$EMPTY,$EMPTY,"\x{060B}","&#060B;",,$EMPTY,$EMPTY],
+AFA => ["Afghani",0,$EMPTY,$EMPTY,"\x{060B}","&#x060B;",,$EMPTY,$EMPTY],
 ALL => ["Lek",2,$EMPTY,$EMPTY,"",$EMPTY,$EMPTY,$EMPTY,$EMPTY],
 AMD => ["Armenian Dram",2,",",".","",$EMPTY,$EMPTY,"AMD",0],
 ANG => ["Antillian Guilder",2,".",","," ","\x{0192}","&#x0192;","NAf.",1],
@@ -369,7 +369,7 @@ BAM => ["Convertible Marks",2,",",".","",$EMPTY,$EMPTY,"AZM",0],
 BBD => ["Barbados Dollar",2,$EMPTY,$EMPTY,"","\x{0024}","&#x0024;",$EMPTY,$EMPTY],
 BDT => ["Taka",2,",","."," ",$EMPTY,$EMPTY,"Bt.",1],
 BEF => ["Belgian Franc",0,".",""," ","\x{20A3}","&#x20A3;","BEF",1],
-BGL => ["Lev",2," ",","," ",$EMPTY,$EMPTY,"lv",0],
+BGN => ["Lev",2," ",","," ",$EMPTY,$EMPTY,"lv",0],
 BHD => ["Bahraini Dinar",3,",","."," ",$EMPTY,$EMPTY,"BD",1],
 BIF => ["Burundi Franc",0,$EMPTY,$EMPTY,"",$EMPTY,$EMPTY,$EMPTY,$EMPTY],
 BMD => ["Bermudian Dollar",2,",",".","","\x{0024}","&#x0024;","\$",1],
@@ -410,7 +410,7 @@ FKP => ["Pound",0,$EMPTY,$EMPTY,"","\x{00A3}","&#x00A3;",$EMPTY,$EMPTY],
 FRF => ["French Franc",2," ",","," ","\x{20A3}","&#x20A3;","FRF",0],
 GBP => ["Pound Sterling",2,",",".","","\x{00A3}","&#x00A3;","£",1],
 GEL => ["Lari",0,$EMPTY,$EMPTY,"",$EMPTY,$EMPTY,$EMPTY,$EMPTY],
-GHS => ["Cedi",2,",",".","","\x{20B5}","&#20B5;","\x{20B5}",1],
+GHS => ["Cedi",2,",",".","","\x{20B5}","&#x20B5;","\x{20B5}",1],
 GIP => ["Gibraltar Pound",2,",",".","","\x{00A3}","&#x00A3;","£",1],
 GMD => ["Dalasi",0,$EMPTY,$EMPTY,"",$EMPTY,$EMPTY,$EMPTY,$EMPTY],
 GNF => ["Guinea Franc",$EMPTY,$EMPTY,$EMPTY,$EMPTY,$EMPTY,$EMPTY,$EMPTY,$EMPTY],
@@ -486,7 +486,7 @@ PYG => ["Guarani",0,$EMPTY,$EMPTY,"","\x{20B2}","&#20B2;","Gs.",$EMPTY],
 QAR => ["Qatari Rial",0,$EMPTY,$EMPTY,"","\x{FDFC}","&#xFDFC;",$EMPTY,$EMPTY],
 RON => ["Leu",2,".",","," ",$EMPTY,$EMPTY,"lei",0],
 RSD => ["Serbian Dinar",2,$EMPTY,$EMPTY,$EMPTY,$EMPTY,$EMPTY,"din",0],
-RUB => ["Russian Ruble",2,".",",",$EMPTY,"\x{0440}\x{0443}\x{0431}","&#0440;&#0443;&#0431;","RUB",1],
+RUB => ["Russian Ruble",2,".",",",$EMPTY,"\x{0440}\x{0443}\x{0431}","&#x0440;&#x0443;&#x0431;","RUB",1],
 RWF => ["Rwanda Franc",0,$EMPTY,$EMPTY,"",$EMPTY,$EMPTY,$EMPTY,$EMPTY],
 SAC => ["S. African Rand Commerc.",0,$EMPTY,$EMPTY,"",$EMPTY,$EMPTY,$EMPTY,$EMPTY],
 SAR => ["Saudi Riyal",2,",","."," ","\x{FDFC}","&#xFDFC;","SR",1],
@@ -699,7 +699,7 @@ The arguments to B<currency_set> are:
         Ex: currency_set('GBP', "\x{00A3}#,###.##", FMT_SYMBOL)
 
         If an HTML symbol is wanted, escape its equivalent HTML code.
-        Ex: currency_set('GBP', '&#00A3;#,###.##', FMT_HTML)
+        Ex: currency_set('GBP', '&#x00A3;#,###.##', FMT_HTML)
 
     FORMAT
         This argument is required if TEMPLATE is present.
