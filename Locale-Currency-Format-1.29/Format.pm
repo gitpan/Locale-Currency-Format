@@ -6,7 +6,7 @@ use strict;
 
 use Exporter;
 
-$Locale::Currency::Format::VERSION = '1.28';
+$Locale::Currency::Format::VERSION = '1.29';
 
 @Locale::Currency::Format::ISA     = qw(Exporter);
 @Locale::Currency::Format::EXPORT  = qw(
@@ -463,7 +463,7 @@ MRO => ["Ouguiya",0,$EMPTY,$EMPTY,"",$EMPTY,$EMPTY,$EMPTY,$EMPTY],
 MTL => ["Maltese Lira",2,",",".","","\x{20A4}","&#x20A4;","Lm",1],
 MUR => ["Mauritius Rupee",0,",","","","\x{20A8}","&#x20A8;","Rs",1],
 MVR => ["Rufiyaa",0,$EMPTY,$EMPTY,"",$EMPTY,$EMPTY,$EMPTY,$EMPTY],
-MWK => ["Kwacha",2,$EMPTY,$EMPTY,"",$EMPTY,$EMPTY,$EMPTY,$EMPTY],
+MWK => ["Kwacha",2,",",".","",$EMPTY,$EMPTY,$EMPTY,$EMPTY],
 MXN => ["Mexican Peso",2,",","."," ","\x{0024}","&#x0024;","\$",1],
 MYR => ["Malaysian Ringgit",2,",",".","",$EMPTY,$EMPTY,"RM",1],
 MZN => ["Metical",2,".",","," ",$EMPTY,$EMPTY,"Mt",0],
